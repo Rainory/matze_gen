@@ -34,6 +34,7 @@ class matze():
                 if i % 2 == 0 and j % 2 == 0:
                     a[i, j] = 0
         self.space = a
+        self.ans = []
 
     def neib(self, c, k):
         ''' поиск соседей к узлу лабиринта (графа, в которых еще не бывал алгоритм), где c - координаты узла, а k - шаг до соседа
@@ -184,42 +185,63 @@ class matze():
     
     def solve(self):
         """находит решение лабиринта и выводит его в консоль, а также сохраняет в отдельной переменной"""
-        space0 = self.space.copy()
-        current = self.start
-        neighbours = self.neib(current, 1)
-        s = stack()
-        self.push(current, 2)
-        while current != self.finish:
-            if len(neighbours) != 0:
-                ind = np.random.randint(len(neighbours))
-                s.push(current)
-                current = neighbours[ind]
-                self.push(current, 2)
-            else:
-                self.push(current, -2)
-                current = s.pop()
+        if  not self.ans:
+            space0 = self.space.copy()
+            current = self.start
             neighbours = self.neib(current, 1)
-        
-        res = '#'*(len(self.space[0]) + 2) + '\n'
-        for i in np.arange(len(self.space)):
-            res += '#'
-            for j in np.arange(len(self.space[i])):
-                if self.space[i][j] == 2:
-                    if (i, j) == self.start:
-                        res += 's'
-                    elif (i, j) == self.finish:
-                        res += 'f'
-                    else:
-                        res += '*'
+            s = stack()
+            self.push(current, 2)
+            while current != self.finish:
+                if len(neighbours) != 0:
+                    ind = np.random.randint(len(neighbours))
+                    s.push(current)
+                    current = neighbours[ind]
+                    self.push(current, 2)
                 else:
-                    if self.space[i][j] == 1:
-                        res += '#'
+                    self.push(current, -2)
+                    current = s.pop()
+                neighbours = self.neib(current, 1)
+            
+            res = '#'*(len(self.space[0]) + 2) + '\n'
+            for i in np.arange(len(self.space)):
+                res += '#'
+                for j in np.arange(len(self.space[i])):
+                    if self.space[i][j] == 2:
+                        if (i, j) == self.start:
+                            res += 's'
+                        elif (i, j) == self.finish:
+                            res += 'f'
+                        else:
+                            res += '*'
                     else:
-                        res += ' '
-            res += '#'
-            res += '\n'
-        res += '#'*(len(self.space[0]) + 2)
-        print(res)
-        self.ans = self.space
-        self.space = space0
+                        if self.space[i][j] == 1:
+                            res += '#'
+                        else:
+                            res += ' '
+                res += '#'
+                res += '\n'
+            res += '#'*(len(self.space[0]) + 2)
+            print(res)
+            self.ans = self.space
+            self.space = space0
+        else:
+            for i in np.arange(len(self.ans)):
+                res += '#'
+                for j in np.arange(len(self.ans[i])):
+                    if self.ans[i][j] == 2:
+                        if (i, j) == self.start:
+                            res += 's'
+                        elif (i, j) == self.finish:
+                            res += 'f'
+                        else:
+                            res += '*'
+                    else:
+                        if self.ans[i][j] == 1:
+                            res += '#'
+                        else:
+                            res += ' '
+                res += '#'
+                res += '\n'
+            res += '#'*(len(self.ans[0]) + 2)
+            print(res)
         return
