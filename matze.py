@@ -20,14 +20,14 @@ def find_id(e, sets):
             return i
 
 class matze():
-    def __init__(self, n, m, start=(0, 0), finish=0):# n - высота, а m - ширина лабиринта?
+    def __init__(self, n=2, m=2, start=(0, 0), finish=0):# n - высота, а m - ширина лабиринта?
         i, j = start
         self.start = (i*2, j*2) 
         if finish == 0:
             self.finish = (2*n - 2, 2*m -2)
         else:
             i, j = finish
-            self.finish(2*i, 2*j)
+            self.finish = (2*i, 2*j)
         a = np.ones((2*n - 1, 2*m -1))
         for i in np.arange(2*n - 1):
             for j in np.arange(2*m - 1):
@@ -131,10 +131,10 @@ class matze():
     def __str__(self):
         """вывод лабиринта в командную строку посимвольно"""
         res = '#'*(len(self.space[0]) + 2) + '\n'
-        for i in range(len(self.space)):
+        for i in np.arange(len(self.space)):
             res += '#'
-            for j in range(len(self.space[i])):
-                if self.space[i, j] == 0:
+            for j in np.arange(len(self.space[i])):
+                if self.space[i][j] == 0:
                     if (i, j) == self.start:
                         res += 's'
                     elif (i, j) == self.finish:
@@ -147,3 +147,36 @@ class matze():
             res += '\n'
         res += '#'*(len(self.space[0]) + 2)
         return res
+
+    def save(self, s):
+        if s[-4:] != '.txt':
+            print("Введенный файл должен быть формата .txt. Пожалуйста, повторите попытку")
+        else:
+            res = ''
+            res += str(self.start)[1:-1] + '\n'
+            res += str(self.finish)[1:-1] + '\n'
+            for i in np.arange(len(self.space)):
+                if i < len(self.space) - 1:
+                    res += str(self.space[i])[1:-1] + '\t'
+                else:
+                    res += str(self.space[i])[1:-1]
+            with open(s, 'w') as f:
+                f.write(res)
+        return
+    
+    def upload(self, s):
+        if s[-4:] != '.txt':
+            print("Введенный файл должен быть формата .txt. Пожалуйста, повторите попытку")
+            return
+        else:
+            with open(s, 'r') as f:
+                res = f.read()
+            res = res.split('\n')
+            start = tuple([int(i) for i in res[0].split(', ')])
+            finish = tuple([int(i) for i in res[1].split(', ')])
+            space = [[float(k) for k in i.split(' ')] for i in res[2].split('\t')]
+            r = matze()
+            r.start = start
+            r.finish = finish
+            r.space = space
+            return r
