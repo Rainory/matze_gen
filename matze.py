@@ -1,4 +1,5 @@
 import numpy as np
+from random import shuffle
 
 class stack :
     def __init__(self, items=[]):
@@ -12,6 +13,11 @@ class stack :
 
     def is_empty(self):
         return (self.items == [])
+
+def find_id(e, sets):
+    for i in np.arange(len(sets)):
+        if e in sets[i]:
+            return i
 
 class matze():
     def __init__(self, n, m):# n - высота, а m - ширина лабиринта?
@@ -85,7 +91,36 @@ class matze():
                 if self.space[i, j] == -1:
                     self.push((i, j), 0)
         return
-    
+
+    def mst(self):
+        """используем рандомизированный алгоритм Крускала"""
+        cells = []
+        for i in np.arange(0, len(self.space), 2):
+            for j in np.arange(0, len(self.space[0]), 2):
+                cells.append((i, j))
+        sets_of_cells = [{i,} for i in cells]
+        edges = []
+        for c in cells:
+            neighbours = self.neib(c, 2)
+            c_edges = [{c, d} for d in neighbours]
+            for i in c_edges:
+                if i not in edges:
+                    edges.append(i)
+        shuffle(edges)
+        for e in edges:
+            e = list(e)
+            i_0 = find_id(e[0], sets_of_cells)
+            i_1 = find_id(e[1], sets_of_cells)
+            if i_0 != i_1:
+                sets_of_cells[i_0] = sets_of_cells[i_0].union(sets_of_cells[i_1])
+                sets_of_cells.pop(i_1)
+                self.push(((e[0][0] + e[1][0])//2, (e[0][1] + e[1][1])//2), -1)
+        for i in np.arange(len(self.space)):
+            for j in np.arange(len(self.space[0])):
+                if self.space[i, j] == -1:
+                    self.push((i, j), 0)
+        return
+   
     def __str__(self):
         """вывод лабиринта в командную строку посимвольно"""
         res = '#'*(len(self.space[0]) + 2) + '\n'
