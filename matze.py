@@ -20,7 +20,14 @@ def find_id(e, sets):
             return i
 
 class matze():
-    def __init__(self, n, m):# n - высота, а m - ширина лабиринта?
+    def __init__(self, n, m, start=(0, 0), finish=0):# n - высота, а m - ширина лабиринта?
+        i, j = start
+        self.start = (i*2, j*2) 
+        if finish == 0:
+            self.finish = (2*n - 2, 2*m -2)
+        else:
+            i, j = finish
+            self.finish(2*i, 2*j)
         a = np.ones((2*n - 1, 2*m -1))
         for i in np.arange(2*n - 1):
             for j in np.arange(2*m - 1):
@@ -128,7 +135,12 @@ class matze():
             res += '#'
             for j in range(len(self.space[i])):
                 if self.space[i, j] == 0:
-                    res += ' '
+                    if (i, j) == self.start:
+                        res += 's'
+                    elif (i, j) == self.finish:
+                        res += 'f'
+                    else:
+                        res += ' '
                 else:
                     res += '#'
             res += '#'
