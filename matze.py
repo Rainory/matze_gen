@@ -60,7 +60,7 @@ class matze():
         return self.space[i, j]
     
     def push(self, c, n):
-        '''кладем в c значение n'''
+        '''кладем в "c" значение n'''
         i, j = c
         self.space[i, j] = n
         return
@@ -72,7 +72,6 @@ class matze():
                 if self.space[i, j] == 0:
                     res.append((i, j))
         return res
-
     
     def dfs(self):
         """реализуем алгоритм dfs"""
@@ -149,6 +148,7 @@ class matze():
         return res
 
     def save(self, s):
+        """позволяет сохранить лабиринт в файл"""
         if s[-4:] != '.txt':
             print("Введенный файл должен быть формата .txt. Пожалуйста, повторите попытку")
         else:
@@ -165,6 +165,7 @@ class matze():
         return
     
     def upload(self, s):
+        """позволяет скачать лабиринт из файла"""
         if s[-4:] != '.txt':
             print("Введенный файл должен быть формата .txt. Пожалуйста, повторите попытку")
             return
@@ -180,3 +181,45 @@ class matze():
             r.finish = finish
             r.space = space
             return r
+    
+    def solve(self):
+        """находит решение лабиринта и выводит его в консоль, а также сохраняет в отдельной переменной"""
+        space0 = self.space.copy()
+        current = self.start
+        neighbours = self.neib(current, 1)
+        s = stack()
+        self.push(current, 2)
+        while current != self.finish:
+            if len(neighbours) != 0:
+                ind = np.random.randint(len(neighbours))
+                s.push(current)
+                current = neighbours[ind]
+                self.push(current, 2)
+            else:
+                self.push(current, -2)
+                current = s.pop()
+            neighbours = self.neib(current, 1)
+        
+        res = '#'*(len(self.space[0]) + 2) + '\n'
+        for i in np.arange(len(self.space)):
+            res += '#'
+            for j in np.arange(len(self.space[i])):
+                if self.space[i][j] == 2:
+                    if (i, j) == self.start:
+                        res += 's'
+                    elif (i, j) == self.finish:
+                        res += 'f'
+                    else:
+                        res += '*'
+                else:
+                    if self.space[i][j] == 1:
+                        res += '#'
+                    else:
+                        res += ' '
+            res += '#'
+            res += '\n'
+        res += '#'*(len(self.space[0]) + 2)
+        print(res)
+        self.ans = self.space
+        self.space = space0
+        return
