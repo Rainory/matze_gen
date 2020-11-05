@@ -1,5 +1,17 @@
 import numpy as np
-#import 
+
+class stack :
+    def __init__(self, items=[]):
+        self.items = items
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        return self.items.pop()
+
+    def is_empty(self):
+        return (self.items == [])
 
 class matze():
     def __init__(self, n, m):# n - высота, а m - ширина лабиринта?
@@ -10,10 +22,11 @@ class matze():
                     a[i, j] = 0
         self.space = a
 
-    def neib(self, i, j, k):
-        ''' поиск соседей к узлу лабиринта (графа, в которых еще не бывал алгоритм), где (i, j) - координаты узла, а k - шаг до соседа
+    def neib(self, c, k):
+        ''' поиск соседей к узлу лабиринта (графа, в которых еще не бывал алгоритм), где c - координаты узла, а k - шаг до соседа
         т.е. если k = 1 - ищем соседниеузлы, если 2, то через один и т.д.'''
         res = []
+        i, j = c
         if i - k >= 0:
             if self.space[i - k, j] == 0:
                 res.append((i - k, j))
@@ -27,15 +40,54 @@ class matze():
             if self.space[i, j + k] == 0:
                 res.append((i, j + k))
         return res
+    
+    def get(self, c):
+        """возвращает элемент space с индексами 'c' """
+        i, j = c
+        return self.space[i, j]
+    
+    def push(self, c, n):
+        '''кладем в c значение n'''
+        i, j = c
+        self.space[i, j] = n
+        return
+
+    def zeros(self):
+        res = []
+        for i in np.arange(len(self.space)):
+            for j in np.arange(len(self.space[0])):
+                if self.space[i, j] == 0:
+                    res.append((i, j))
+        return res
 
     
-    """def asdf(self):
-        stack = []
-        for i in for i in np.arange(0, 2*n - 1, 2):
-            for j in np.arange(0, 2*m - 1, 2):
-                stack.append((i, j))"""
+    def dfs(self):
+        """реализуем алгоритм dfs"""
+        s = stack()
+        current = (0, 0)
+        while 0 in [el for st in self.space for el in st]:
+            neighbours = self.neib(current, k=2)
+            self.push(current, -1)
+            if len(neighbours) > 0:
+                s.push(current)
+                ind = np.random.randint(len(neighbours))
+                current = neighbours[ind]
+                self.push(current, -1)
+                self.push(((current[0] + s.items[-1][0])//2, (current[1] + s.items[-1][1])//2), -1)
+            elif len(s.items) != 0:
+                current = s.pop()
+            else:
+                zer = self.zeros()
+                ind = np.random.randint(len(zer))
+                current = zer[ind]
+        for i in np.arange(len(self.space)):
+            for j in np.arange(len(self.space[0])):
+                if self.space[i, j] == -1:
+                    self.push((i, j), 0)
+        return
     
-    def __str__(self):# вывод лабиринта в командную строку посимвольно
+    def __str__(self):
+        """вывод лабиринта в командную строку посимвольно"""
         res = '#'*(len(self.space[0]) + 2) + '\n'
         for i in range(len(self.space)):
             res += '#'
@@ -48,5 +100,3 @@ class matze():
             res += '\n'
         res += '#'*(len(self.space[0]) + 2)
         return res
-
-
