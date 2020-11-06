@@ -9,7 +9,7 @@ layout = [[sg.Text('Введите размеры лабиринта и (по ж
           [sg.Text('start:', size=(10, 1)), sg.InputText(), sg.Text('finish:', size=(10, 1)), sg.InputText()],
           [sg.Text('Выберите алгоритм генерации:', size=(30, 1)), sg.InputCombo(('dfs', 'mst'), size=(20, 3))],
           [sg.Text('имя файла:', size=(15, 1)), sg.InputText()],
-          [sg.Button('Генерировать'), sg.Button('Решить'), sg.Button('Сохоанить')],
+          [sg.Button('Генерировать'), sg.Button('Решить'), sg.Button('Сохранить')],
           [sg.Button('Загрузить'), sg.Button('Закрыть')]]
 
 window = sg.Window('Генератор лабиринтов', layout)
