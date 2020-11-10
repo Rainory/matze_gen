@@ -180,7 +180,7 @@ class matze():
             r = matze()
             r.start = start
             r.finish = finish
-            r.space = space
+            r.space = np.array(space)
             return r
     
     def solve(self):
