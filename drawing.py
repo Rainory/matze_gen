@@ -8,6 +8,7 @@ def pr_matze(s, k=0):
         a = s.space
     else:
         a = s.ans
+    pylab.clf()
     axes = pylab.gca()
     for i in np.arange(len(a[0]) + 2):
         axes.add_patch(pylab.Polygon([(i*2/(len(a[0]) + 2), 0),((i+1)*2/(len(a[0]) + 2), 0),((i+1)*2/(len(a[0]) + 2), -2/(len(a) + 2)), (i*2/(len(a[0]) + 2), -2/(len(a) + 2))], color='black'))
