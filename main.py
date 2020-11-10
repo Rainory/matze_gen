@@ -62,7 +62,8 @@ while True:
             continue
         try:
             a = matze.matze()
-            a.upload(values[5])
+            a = a.upload(values[5])
+            print(a)
         except:
             print('Проверьте наличие данного файла')
             continue
