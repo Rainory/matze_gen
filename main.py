@@ -25,10 +25,23 @@ while True:
             print('Заполните поля n, m и выберите алгоритм')
             continue
         else:
+            try:
+                n1 = int(values[0])
+                n2 = int(values[1])
+                if n1 < 1 and n2 < 1:
+                    raise Exception
+            except:
+                print('Введены некорректные размеры лабиринта. Должно быть два натуральных числа')
             if values[2] == '':
                 start = (0, 0)
             else:
-                start = tuple([int(i) for i in values[2].split(',')])
+                try:
+                    start = tuple([int(i) for i in values[2].split(',')])
+                    if start[0] > n1 or start[0] < 0 or start[1] > n2 or start[1] < 0:
+                        print('Недопустимые координаты старта')
+                        raise Exception
+                except:
+                    print('Введены некоректные координаты старта. Они должны быть в промежутке [0,n)')
             if values[3] == '':
                 finish = 0
             else:
@@ -39,14 +52,14 @@ while True:
             else:
                 a.mst()
             drawing.pr_matze(a)
-    
+
     if event == 'Вывести':
         try:
             print(a)
             drawing.pr_matze(a)
         except:
             print('Что-то пошло не так. Возможно, вы еще не создали или не загрузили лабиринт')
-        
+
     if event == 'Решить':
         try:
             a.solve()
