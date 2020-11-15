@@ -35,6 +35,7 @@ class matze():
                     a[i, j] = 0
         self.space = a
         self.ans = []
+        self.k = 0
 
     def neib(self, c, k):
         ''' поиск соседей к узлу лабиринта (графа, в которых еще не бывал алгоритм), где c - координаты узла, а k - шаг до соседа
@@ -131,18 +132,25 @@ class matze():
     def __str__(self):
         """вывод лабиринта в командную строку посимвольно"""
         res = '#'*(len(self.space[0]) + 2) + '\n'
-        for i in np.arange(len(self.space)):
+        if self.k == 0:
+            a = self.space
+        else:
+            a = self.ans
+        for i in np.arange(len(a)):
             res += '#'
-            for j in np.arange(len(self.space[i])):
-                if self.space[i][j] == 0:
+            for j in np.arange(len(a[i])):
+                if a[i][j] == 2:
                     if (i, j) == self.start:
                         res += 's'
                     elif (i, j) == self.finish:
                         res += 'f'
                     else:
-                        res += ' '
+                        res += '*'
                 else:
-                    res += '#'
+                    if a[i][j] == 1:
+                        res += '#'
+                    else:
+                        res += ' '
             res += '#'
             res += '\n'
         res += '#'*(len(self.space[0]) + 2)
@@ -185,7 +193,7 @@ class matze():
     
     def solve(self):
         """находит решение лабиринта и выводит его в консоль, а также сохраняет в отдельной переменной"""
-        if  not self.ans:
+        if  len(self.ans) == 0:
             space0 = self.space.copy()
             current = self.start
             neighbours = self.neib(current, 1)
@@ -201,47 +209,13 @@ class matze():
                     self.push(current, -2)
                     current = s.pop()
                 neighbours = self.neib(current, 1)
-            
-            res = '#'*(len(self.space[0]) + 2) + '\n'
-            for i in np.arange(len(self.space)):
-                res += '#'
-                for j in np.arange(len(self.space[i])):
-                    if self.space[i][j] == 2:
-                        if (i, j) == self.start:
-                            res += 's'
-                        elif (i, j) == self.finish:
-                            res += 'f'
-                        else:
-                            res += '*'
-                    else:
-                        if self.space[i][j] == 1:
-                            res += '#'
-                        else:
-                            res += ' '
-                res += '#'
-                res += '\n'
-            res += '#'*(len(self.space[0]) + 2)
-            print(res)
             self.ans = self.space
             self.space = space0
+            self.k = 1
+            print(self)
+            self.k = 0
         else:
-            for i in np.arange(len(self.ans)):
-                res += '#'
-                for j in np.arange(len(self.ans[i])):
-                    if self.ans[i][j] == 2:
-                        if (i, j) == self.start:
-                            res += 's'
-                        elif (i, j) == self.finish:
-                            res += 'f'
-                        else:
-                            res += '*'
-                    else:
-                        if self.ans[i][j] == 1:
-                            res += '#'
-                        else:
-                            res += ' '
-                res += '#'
-                res += '\n'
-            res += '#'*(len(self.ans[0]) + 2)
-            print(res)
+            self.k = 1
+            print(self)
+            self.k = 0
         return
