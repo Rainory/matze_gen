@@ -9,6 +9,7 @@ def pr_matze(s, k=0):
     else:
         a = s.ans
     pylab.clf()
+    pylab.rcParams['figure.figsize'] = 12, 10
     axes = pylab.gca()
     for i in np.arange(len(a[0]) + 2):
         axes.add_patch(pylab.Polygon([(i*2/(len(a[0]) + 2), 0),((i+1)*2/(len(a[0]) + 2), 0),((i+1)*2/(len(a[0]) + 2), -2/(len(a) + 2)), (i*2/(len(a[0]) + 2), -2/(len(a) + 2))], color='black'))
@@ -31,6 +32,5 @@ def pr_matze(s, k=0):
         axes.add_patch(pylab.Polygon([(i*2/(len(a[0]) + 2), -2/(len(a) + 2)*(len(a) + 1)),((i+1)*2/(len(a[0]) + 2), -2/(len(a) + 2)*(len(a) + 1)),((i+1)*2/(len(a[0]) + 2), -2), (i*2/(len(a[0]) + 2), -2)], color='black'))
     pylab.xlim(0, 2)
     pylab.ylim(-2, 0)
-    pylab.rcParams['figure.figsize'] = 12, 10
     pylab.show()
     return
