@@ -23,6 +23,7 @@ while True:
     if event == 'Генерировать':
         if values[0] == '' or values[1] == '' or values[4] == '':
             print('Заполните поля n, m и выберите алгоритм')
+            sg.popup('Заполните поля n, m и выберите алгоритм')
             continue
         else:
             try:
@@ -32,6 +33,7 @@ while True:
                     raise Exception
             except:
                 print('Введены некорректные размеры лабиринта. Должно быть два натуральных числа')
+                sg.popup('Введены некорректные размеры лабиринта. Должно быть два натуральных числа')
             if values[2] == '':
                 start = (0, 0)
             else:
@@ -39,9 +41,11 @@ while True:
                     start = tuple([int(i) for i in values[2].split(',')])
                     if start[0] > n1 or start[0] < 0 or start[1] > n2 or start[1] < 0:
                         print('Недопустимые координаты старта')
+                        sg.popup('Недопустимые координаты старта')
                         raise Exception
                 except:
                     print('Введены некоректные координаты старта. Они должны быть в промежутке [0, n), [0, m)')
+                    sg.popup('Введены некоректные координаты старта. Они должны быть в промежутке [0, n), [0, m)')
             if values[3] == '':
                 finish = 0
             else:
@@ -49,9 +53,11 @@ while True:
                     finish = tuple([int(i) for i in values[3].split(',')])
                     if finish[0] > n1 or finish[0] < 0 or finish[1] > n2 or finish[1] < 0:
                         print('Недопустимые координаты финиша')
+                        sg.popup('Недопустимые координаты финиша')
                         raise Exception
                 except:
                     print('Введены некоректные координаты финиша. Они должны быть в промежутке [0, n), [0, m)')
+                    sg.popup('Введены некоректные координаты финиша. Они должны быть в промежутке [0, n), [0, m)')
             a = matze.matze(int(values[0]), int(values[1]), start, finish)
             if values[4] == 'dfs':
                 a.dfs()
@@ -65,6 +71,7 @@ while True:
             drawing.pr_matze(a)
         except:
             print('Что-то пошло не так. Возможно, вы еще не создали или не загрузили лабиринт')
+            sg.popup('Что-то пошло не так. Возможно, вы еще не создали или не загрузили лабиринт')
 
     if event == 'Решить':
         try:
@@ -72,19 +79,23 @@ while True:
             drawing.pr_matze(a, 1)
         except:
             print('Сначала сгенерируйте или загрузите лабиринт!')
+            sg.popup('Сначала сгенерируйте или загрузите лабиринт!')
             continue
     
     if event == 'Сохранить':
         if values[5] == '' or values[5][-4:] != '.txt':
             print('Заполните имя файла(формат .txt)')
+            sg.popup('Заполните имя файла(формат .txt)')
         try:
             a.save(values[5])
         except:
             print('Возможно лабиринт не сгенерирован или введено некорректное имя файла')
+            sg.popup('Возможно лабиринт не сгенерирован или введено некорректное имя файла')
     
     if event == 'Загрузить':
         if values[5] == '' or values[5][-4:] != '.txt':
             print('Заполните имя файла(формат .txt)')
+            sg.popup('Заполните имя файла(формат .txt)')
             continue
         try:
             a = matze.matze()
@@ -92,6 +103,7 @@ while True:
             print(a)
         except:
             print('Проверьте наличие данного файла')
+            sg.popup('Проверьте наличие данного файла')
             continue
 
 window.close()
