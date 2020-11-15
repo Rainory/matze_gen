@@ -41,11 +41,17 @@ while True:
                         print('Недопустимые координаты старта')
                         raise Exception
                 except:
-                    print('Введены некоректные координаты старта. Они должны быть в промежутке [0,n)')
+                    print('Введены некоректные координаты старта. Они должны быть в промежутке [0, n), [0, m)')
             if values[3] == '':
                 finish = 0
             else:
-                finish = tuple([int(i) for i in values[3].split(',')])
+                try:
+                    finish = tuple([int(i) for i in values[3].split(',')])
+                    if finish[0] > n1 or finish[0] < 0 or finish[1] > n2 or finish[1] < 0:
+                        print('Недопустимые координаты финиша')
+                        raise Exception
+                except:
+                    print('Введены некоректные координаты финиша. Они должны быть в промежутке [0, n), [0, m)')
             a = matze.matze(int(values[0]), int(values[1]), start, finish)
             if values[4] == 'dfs':
                 a.dfs()
@@ -74,7 +80,7 @@ while True:
         try:
             a.save(values[5])
         except:
-            print('Сначала сгенерируйте лабиринт!')
+            print('Возможно лабиринт не сгенерирован или введено некорректное имя файла')
     
     if event == 'Загрузить':
         if values[5] == '' or values[5][-4:] != '.txt':
